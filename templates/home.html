@@ -5,40 +5,104 @@
 {% block content %}
 <div class="container py-5">
     <!-- Hero Section -->
-    <div class="row align-items-center mb-5">
+    <div class="row align-items-center mb-5 hero-section p-5 rounded-lg">
         <div class="col-md-6">
-            <h1 class="display-4 mb-4" style="color: #1e3c72; font-weight: bold;">
-                🏔️ Explore the Mountains
-            </h1>
-            <p class="lead mb-4" style="color: #555;">
-                Welcome to the Trekking Management Application. Plan your adventures, 
-                book treks, and create unforgettable memories on the mountains.
+            <h1 class="display-3 mb-4">🏔️ Explore the Mountains</h1>
+            <p class="lead mb-4" style="font-size: 1.2rem;">
+                Join thousands of adventurers on unforgettable trekking journeys. 
+                Plan your next adventure, book amazing treks, and create lifelong memories!
             </p>
             <div class="d-flex gap-3">
-                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
-                    Login
+                <a href="{{ url_for('login') }}" class="btn btn-light btn-lg" style="color: var(--primary-color); font-weight: bold;">
+                    🔐 Login
                 </a>
-                <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg">
-                    Register
+                <a href="{{ url_for('register') }}" class="btn btn-light btn-lg" style="color: var(--primary-color); font-weight: bold;">
+                    📝 Register Now
                 </a>
             </div>
         </div>
         <div class="col-md-6 text-center">
-            <div style="font-size: 150px;">🏔️</div>
+            <div style="font-size: 150px; animation: bounce 2s infinite;">🏔️</div>
         </div>
     </div>
 
-    <!-- Features Section -->
+    <!-- Featured Treks Section -->
     <div class="row mt-5 pt-5">
-        <h2 class="text-center mb-5" style="color: #1e3c72; font-weight: bold;">Why Choose Us?</h2>
+        <h2 class="text-center mb-5" style="color: var(--primary-color); font-weight: bold; font-size: 2.5rem;">
+            ⭐ Featured Trek Destinations
+        </h2>
+        
+        <!-- Trek 1: Everest Base Camp -->
+        <div class="col-md-4 mb-4">
+            <div class="trek-card">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=300&fit=crop" 
+                     alt="Everest Base Camp" class="trek-card-image">
+                <div class="trek-card-header">
+                    🏔️ Everest Base Camp
+                </div>
+                <div class="trek-card-body">
+                    <p class="text-muted"><strong>Location:</strong> Nepal</p>
+                    <p class="text-muted"><strong>Difficulty:</strong> 
+                        <span class="difficulty-badge difficulty-hard">Hard</span>
+                    </p>
+                    <p class="text-muted"><strong>Duration:</strong> 14 days</p>
+                    <p style="color: #666;">The world's most iconic trek. Experience the majesty of Mount Everest and trek through stunning Himalayan landscapes.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trek 2: Annapurna Circuit -->
+        <div class="col-md-4 mb-4">
+            <div class="trek-card">
+                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=300&fit=crop" 
+                     alt="Annapurna Circuit" class="trek-card-image">
+                <div class="trek-card-header">
+                    ⛰️ Annapurna Circuit
+                </div>
+                <div class="trek-card-body">
+                    <p class="text-muted"><strong>Location:</strong> Nepal</p>
+                    <p class="text-muted"><strong>Difficulty:</strong> 
+                        <span class="difficulty-badge difficulty-moderate">Moderate</span>
+                    </p>
+                    <p class="text-muted"><strong>Duration:</strong> 21 days</p>
+                    <p style="color: #666;">Spectacular mountain scenery, diverse culture, and incredible views. One of the most beautiful treks in the world!</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trek 3: Mountain Peak -->
+        <div class="col-md-4 mb-4">
+            <div class="trek-card">
+                <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=500&h=300&fit=crop" 
+                     alt="Mountain Peak" class="trek-card-image">
+                <div class="trek-card-header">
+                    🗻 Alpine Adventure
+                </div>
+                <div class="trek-card-body">
+                    <p class="text-muted"><strong>Location:</strong> Himalayas</p>
+                    <p class="text-muted"><strong>Difficulty:</strong> 
+                        <span class="difficulty-badge difficulty-easy">Easy</span>
+                    </p>
+                    <p class="text-muted"><strong>Duration:</strong> 5 days</p>
+                    <p style="color: #666;">Perfect for beginners! Enjoy stunning alpine meadows, crystal clear mountain air, and breathtaking vistas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us Section -->
+    <div class="row mt-5 pt-5">
+        <h2 class="text-center mb-5" style="color: var(--primary-color); font-weight: bold; font-size: 2.5rem;">
+            💎 Why Choose Us?
+        </h2>
         
         <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">📍</div>
-                    <h5 class="card-title" style="color: #1e3c72;">Multiple Locations</h5>
+                    <div style="font-size: 4rem; margin-bottom: 15px;">📍</div>
+                    <h5 class="card-title" style="color: var(--primary-color); font-weight: bold;">Multiple Locations</h5>
                     <p class="card-text">
-                        Explore treks across diverse locations and difficulty levels.
+                        Explore diverse treks across mountains, forests, and valleys worldwide.
                     </p>
                 </div>
             </div>
@@ -47,10 +111,10 @@
         <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">👥</div>
-                    <h5 class="card-title" style="color: #1e3c72;">Expert Guides</h5>
+                    <div style="font-size: 4rem; margin-bottom: 15px;">👥</div>
+                    <h5 class="card-title" style="color: var(--primary-color); font-weight: bold;">Expert Guides</h5>
                     <p class="card-text">
-                        Professional and experienced trek guides for your safety and enjoyment.
+                        Experienced, certified trek guides ensuring your safety and comfort.
                     </p>
                 </div>
             </div>
@@ -59,10 +123,10 @@
         <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-body text-center">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">✅</div>
-                    <h5 class="card-title" style="color: #1e3c72;">Easy Booking</h5>
+                    <div style="font-size: 4rem; margin-bottom: 15px;">✅</div>
+                    <h5 class="card-title" style="color: var(--primary-color); font-weight: bold;">Easy Booking</h5>
                     <p class="card-text">
-                        Simple and secure booking system with instant confirmation.
+                        Simple, secure online booking with instant confirmation.
                     </p>
                 </div>
             </div>
@@ -71,37 +135,76 @@
 
     <!-- How It Works Section -->
     <div class="row mt-5 pt-5">
-        <h2 class="text-center mb-5" style="color: #1e3c72; font-weight: bold;">How It Works</h2>
+        <h2 class="text-center mb-5" style="color: var(--primary-color); font-weight: bold; font-size: 2.5rem;">
+            🚀 How It Works
+        </h2>
         
         <div class="col-md-3 text-center mb-4">
             <div class="stat-card">
                 <div class="stat-number">1</div>
-                <h6>Register</h6>
-                <p>Create your account as a trekker or staff member</p>
+                <h6 style="color: var(--primary-color); font-weight: bold; margin-top: 15px;">Register</h6>
+                <p>Create your account in seconds</p>
             </div>
         </div>
         
         <div class="col-md-3 text-center mb-4">
             <div class="stat-card">
                 <div class="stat-number">2</div>
-                <h6>Browse</h6>
-                <p>Explore available treks and check details</p>
+                <h6 style="color: var(--primary-color); font-weight: bold; margin-top: 15px;">Browse</h6>
+                <p>Explore amazing trek destinations</p>
             </div>
         </div>
         
         <div class="col-md-3 text-center mb-4">
             <div class="stat-card">
                 <div class="stat-number">3</div>
-                <h6>Book</h6>
-                <p>Book your trek and get instant confirmation</p>
+                <h6 style="color: var(--primary-color); font-weight: bold; margin-top: 15px;">Book</h6>
+                <p>Secure your spot instantly</p>
             </div>
         </div>
         
         <div class="col-md-3 text-center mb-4">
             <div class="stat-card">
                 <div class="stat-number">4</div>
-                <h6>Trek!</h6>
-                <p>Enjoy your adventure with expert guides</p>
+                <h6 style="color: var(--primary-color); font-weight: bold; margin-top: 15px;">Trek!</h6>
+                <p>Enjoy your adventure with experts</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="row mt-5 pt-5">
+        <h2 class="text-center mb-5" style="color: var(--primary-color); font-weight: bold; font-size: 2.5rem;">
+            ⭐ What Trekkers Say
+        </h2>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div style="font-size: 1.5rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+                    <p><em>"Best trek experience ever! The guides were amazing and the views were breathtaking!"</em></p>
+                    <p style="margin-top: 15px;"><strong>- Sarah, Trekker</strong></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div style="font-size: 1.5rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+                    <p><em>"Booking was so easy and everything was perfectly organized. Highly recommended!"</em></p>
+                    <p style="margin-top: 15px;"><strong>- John, Adventurer</strong></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div style="font-size: 1.5rem; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+                    <p><em>"Life-changing experience! I can't wait to book another trek with them!"</em></p>
+                    <p style="margin-top: 15px;"><strong>- Emma, Explorer</strong></p>
+                </div>
             </div>
         </div>
     </div>
@@ -109,12 +212,12 @@
     <!-- Call to Action -->
     <div class="row mt-5 pt-5">
         <div class="col-md-8 offset-md-2">
-            <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
-                        color: white; padding: 40px; border-radius: 10px; text-align: center;">
-                <h3 class="mb-3">Ready to Start Your Adventure?</h3>
-                <p class="mb-4">Join thousands of trekkers who have discovered amazing trails with us.</p>
-                <a href="{{ url_for('register') }}" class="btn btn-warning btn-lg">
-                    Get Started Now
+            <div style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); 
+                        color: white; padding: 50px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(255, 149, 0, 0.3);">
+                <h3 class="mb-3" style="font-size: 2rem; font-weight: bold;">Ready for Your Next Adventure?</h3>
+                <p class="mb-4" style="font-size: 1.1rem;">Join thousands of adventurers who have discovered amazing trails. Start your journey today!</p>
+                <a href="{{ url_for('register') }}" class="btn btn-light btn-lg" style="color: var(--primary-color); font-weight: bold; padding: 15px 40px;">
+                    🚀 Get Started Now
                 </a>
             </div>
         </div>
