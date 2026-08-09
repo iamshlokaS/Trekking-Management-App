@@ -350,22 +350,29 @@ def logout():
 def dashboard():
     """Main dashboard - routes to appropriate dashboard based on user type"""
     try:
-        user_type = type(current_user).__name__
-        print(f"Dashboard route: User type = {user_type}, User ID = {current_user.get_id()}")
-        
+        # Get the actual logged-in user behind Flask-Login's LocalProxy
+        user = current_user._get_current_object()
+        user_type = type(user).__name__
+
+        print(f"Dashboard route: User type = {user_type}, User ID = {user.get_id()}")
+
         if user_type == 'Admin':
             print("Redirecting to admin_dashboard")
             return redirect(url_for('admin_dashboard'))
+
         elif user_type == 'Staff':
             print("Redirecting to staff_dashboard")
             return redirect(url_for('staff_dashboard'))
+
         elif user_type == 'User':
             print("Redirecting to user_dashboard")
             return redirect(url_for('user_dashboard'))
+
         else:
             print(f"Unknown user type: {user_type}")
             flash('Unable to determine user type', 'danger')
             return redirect(url_for('home'))
+
     except Exception as e:
         print(f"Dashboard error: {e}")
         flash('An error occurred', 'danger')
