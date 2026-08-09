@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">📊 Admin Dashboard</h1>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <h6 class="text-muted">Total Treks</h6>
+                <div class="stat-number">{{ total_treks }}</div>
+                <a href="{{ url_for('admin_treks') }}" class="btn btn-sm btn-primary mt-2">Manage</a>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <h6 class="text-muted">Total Users</h6>
+                <div class="stat-number">{{ total_users }}</div>
+                <a href="{{ url_for('admin_users') }}" class="btn btn-sm btn-primary mt-2">Manage</a>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <h6 class="text-muted">Total Staff</h6>
+                <div class="stat-number">{{ total_staff }}</div>
+                <a href="{{ url_for('admin_staff') }}" class="btn btn-sm btn-primary mt-2">Manage</a>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <h6 class="text-muted">Total Bookings</h6>
+                <div class="stat-number">{{ total_bookings }}</div>
+                <a href="{{ url_for('admin_bookings') }}" class="btn btn-sm btn-primary mt-2">View</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerts Section -->
+    <div class="row mb-4">
+        {% if pending_staff > 0 %}
+        <div class="col-md-6 mb-3">
+            <div class="alert alert-warning">
+                <strong>⚠️ Pending Staff Approvals:</strong>
+                <p>{{ pending_staff }} staff member(s) awaiting approval</p>
+                <a href="{{ url_for('admin_staff') }}" class="btn btn-sm btn-warning">Review Staff</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if pending_treks > 0 %}
+        <div class="col-md-6 mb-3">
+            <div class="alert alert-info">
+                <strong>ℹ️ Pending Treks:</strong>
+                <p>{{ pending_treks }} trek(s) awaiting approval</p>
+                <a href="{{ url_for('admin_treks') }}" class="btn btn-sm btn-info">Review Treks</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Action Buttons -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{{ url_for('create_trek') }}" class="btn btn-success">
+                            ➕ Create New Trek
+                        </a>
+                        <a href="{{ url_for('admin_treks') }}" class="btn btn-info">
+                            👁️ View All Treks
+                        </a>
+                        <a href="{{ url_for('admin_staff') }}" class="btn btn-warning">
+                            🔔 Pending Staff
+                        </a>
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">
+                            👥 View Users
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Sections -->
+    <div class="row">
+        <!-- Treks Summary -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Trek Management</h5>
+                </div>
+                <div class="card-body">
+                    <p>Create, update, and manage trekking events. Assign staff members to treks and monitor trek status.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('create_trek') }}" class="btn btn-outline-primary">Create Trek</a>
+                        <a href="{{ url_for('admin_treks') }}" class="btn btn-outline-primary">Manage Treks</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Staff Summary -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Staff Management</h5>
+                </div>
+                <div class="card-body">
+                    <p>Approve new staff registrations, assign staff to treks, and manage staff accounts.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('admin_staff') }}" class="btn btn-outline-primary">Manage Staff</a>
+                        <button type="button" class="btn btn-outline-primary" disabled>
+                            Pending: {{ pending_staff }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Summary -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">User Management</h5>
+                </div>
+                <div class="card-body">
+                    <p>View all registered users, manage bookings, and handle user accounts.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-outline-primary">Manage Users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Summary -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Booking Management</h5>
+                </div>
+                <div class="card-body">
+                    <p>View and monitor all trek bookings. Track booking history and status.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('admin_bookings') }}" class="btn btn-outline-primary">View Bookings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Treks - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">🏔️ Manage Treks</h1>
+
+    <!-- Search and Create Buttons -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="GET" class="d-flex gap-2">
+                <input type="text" class="form-control" name="search" placeholder="Search by trek name or location..." 
+                       value="{{ search_query or '' }}">
+                <button type="submit" class="btn btn-info">Search</button>
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            <a href="{{ url_for('create_trek') }}" class="btn btn-success">
+                ➕ Create New Trek
+            </a>
+        </div>
+    </div>
+
+    <!-- Treks Table -->
+    <div class="row">
+        <div class="col-md-12">
+            {% if treks %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Trek Name</th>
+                            <th>Location</th>
+                            <th>Difficulty</th>
+                            <th>Duration</th>
+                            <th>Slots</th>
+                            <th>Status</th>
+                            <th>Staff</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for trek in treks %}
+                        <tr>
+                            <td><strong>{{ trek.name }}</strong></td>
+                            <td>{{ trek.location }}</td>
+                            <td>
+                                <span class="difficulty-badge difficulty-{{ trek.difficulty.lower() }}">
+                                    {{ trek.difficulty }}
+                                </span>
+                            </td>
+                            <td>{{ trek.duration_days }} days</td>
+                            <td>
+                                <span class="badge bg-info">
+                                    {{ trek.available_slots }}/{{ trek.total_slots }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ trek.status.lower() }}">
+                                    {{ trek.status }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if trek.assigned_staff %}
+                                    {{ trek.assigned_staff.full_name }}
+                                {% else %}
+                                    <span class="text-muted">Not assigned</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ url_for('edit_trek', trek_id=trek.id) }}" 
+                                       class="btn btn-warning" title="Edit">
+                                        ✏️ Edit
+                                    </a>
+                                    <a href="{{ url_for('assign_staff', trek_id=trek.id) }}" 
+                                       class="btn btn-primary" title="Assign Staff">
+                                        👤 Assign
+                                    </a>
+                                    <button class="btn btn-danger" data-bs-toggle="modal" 
+                                            data-bs-target="#deleteModal" onclick="setDeleteId({{ trek.id }})">
+                                        🗑️ Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <strong>No treks found.</strong> 
+                <a href="{{ url_for('create_trek') }}">Create the first trek</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this trek? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" id="confirmDelete">Delete Trek</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let deleteId = null;
+
+    function setDeleteId(id) {
+        deleteId = id;
+        const form = document.querySelector('#deleteModal form');
+        form.action = `/admin/trek/${id}/delete`;
+    }
+</script>
+{% endblock %}

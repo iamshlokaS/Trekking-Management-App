@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">🥾 Trekker Dashboard</h1>
+
+    <!-- Welcome Message -->
+    <div class="user-info-box">
+        <h5>Welcome, {{ current_user.full_name }}!</h5>
+        <p class="mb-0">
+            You have <strong>{{ bookings|length }}</strong> active booking(s) and 
+            <strong>{{ available_treks|length }}</strong> open trek(s) to explore!
+        </p>
+    </div>
+
+    <!-- Active Bookings -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <h3 class="mb-4">Your Active Bookings</h3>
+            
+            {% set active_bookings = bookings|selectattr('status', 'equalto', 'Booked')|list %}
+            
+            {% if active_bookings %}
+                <div class="row">
+                    {% for booking in active_bookings %}
+                    <div class="col-md-6 mb-4">
+                        <div class="trek-card">
+                            <div class="trek-card-header">
+                                <h5 class="mb-0">{{ booking.trek.name }}</h5>
+                            </div>
+                            <div class="trek-card-body">
+                                <p><strong>Location:</strong> {{ booking.trek.location }}</p>
+                                <p><strong>Difficulty:</strong> 
+                                    <span class="difficulty-badge difficulty-{{ booking.trek.difficulty.lower() }}">
+                                        {{ booking.trek.difficulty }}
+                                    </span>
+                                </p>
+                                <p><strong>Duration:</strong> {{ booking.trek.duration_days }} days</p>
+                                <p><strong>Start:</strong> {{ booking.trek.start_date.strftime('%d %b %Y') }}</p>
+                                <p><strong>Status:</strong> 
+                                    <span class="status-badge status-{{ booking.trek.status.lower() }}">
+                                        {{ booking.trek.status }}
+                                    </span>
+                                </p>
+                                <p><strong>Booking Date:</strong> {{ booking.booking_date.strftime('%d %b %Y') }}</p>
+                                
+                                <form method="POST" action="{{ url_for('cancel_booking', booking_id=booking.id) }}" 
+                                      onclick="return confirm('Cancel this booking?')">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        ❌ Cancel Booking
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+            <div class="alert alert-info">
+                No active bookings. <a href="{{ url_for('browse_treks') }}">Browse available treks</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Available Treks -->
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="mb-4">Available Treks to Book</h3>
+            
+            {% if available_treks %}
+                <div class="row">
+                    {% for trek in available_treks[:3] %}
+                    <div class="col-md-6 mb-4">
+                        <div class="trek-card">
+                            <div class="trek-card-header">
+                                <h5 class="mb-0">{{ trek.name }}</h5>
+                            </div>
+                            <div class="trek-card-body">
+                                <p><strong>Location:</strong> {{ trek.location }}</p>
+                                <p><strong>Difficulty:</strong> 
+                                    <span class="difficulty-badge difficulty-{{ trek.difficulty.lower() }}">
+                                        {{ trek.difficulty }}
+                                    </span>
+                                </p>
+                                <p><strong>Duration:</strong> {{ trek.duration_days }} days</p>
+                                <p><strong>Available Slots:</strong> 
+                                    <span class="badge bg-info">{{ trek.get_available_slots() }}/{{ trek.total_slots }}</span>
+                                </p>
+                                <p><strong>Start Date:</strong> {{ trek.start_date.strftime('%d %b %Y') }}</p>
+                                
+                                <a href="{{ url_for('book_trek', trek_id=trek.id) }}" class="btn btn-primary btn-sm">
+                                    📍 View & Book
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('browse_treks') }}" class="btn btn-outline-primary btn-lg">
+                        🔍 Browse All Treks
+                    </a>
+                </div>
+            {% else %}
+            <div class="alert alert-info">
+                No open treks available at the moment.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">🔍 Browse Treks</h5>
+                    <p class="card-text">Explore all available treks with advanced filters</p>
+                    <a href="{{ url_for('browse_treks') }}" class="btn btn-outline-primary">Browse</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📋 My Bookings</h5>
+                    <p class="card-text">View your complete booking history</p>
+                    <a href="{{ url_for('user_bookings') }}" class="btn btn-outline-primary">View History</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Dashboard - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">🎯 Staff Dashboard</h1>
+
+    <!-- Welcome Message -->
+    <div class="user-info-box">
+        <h5>Welcome, {{ current_user.full_name }}!</h5>
+        <p class="mb-0">
+            You have <strong>{{ trek_stats|length }}</strong> trek(s) assigned to you.
+        </p>
+    </div>
+
+    <!-- Assigned Treks -->
+    {% if trek_stats %}
+    <div class="row">
+        <h3 class="mb-4">Assigned Treks</h3>
+        
+        {% for item in trek_stats %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">{{ item.trek.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless mb-3">
+                        <tr>
+                            <th>Location:</th>
+                            <td>{{ item.trek.location }}</td>
+                        </tr>
+                        <tr>
+                            <th>Difficulty:</th>
+                            <td>
+                                <span class="difficulty-badge difficulty-{{ item.trek.difficulty.lower() }}">
+                                    {{ item.trek.difficulty }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Duration:</th>
+                            <td>{{ item.trek.duration_days }} days</td>
+                        </tr>
+                        <tr>
+                            <th>Start Date:</th>
+                            <td>{{ item.trek.start_date.strftime('%d %b %Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                <span class="status-badge status-{{ item.trek.status.lower() }}">
+                                    {{ item.trek.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Available Slots:</th>
+                            <td>
+                                <span class="badge bg-info">
+                                    {{ item.available_slots }}/{{ item.trek.total_slots }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Registered Users:</th>
+                            <td>
+                                <span class="badge bg-success">{{ item.booked_count }}</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Action Buttons -->
+                    <div class="btn-group w-100" role="group">
+                        <a href="{{ url_for('update_slots', trek_id=item.trek.id) }}" 
+                           class="btn btn-primary">
+                            ✏️ Update Details
+                        </a>
+                        <a href="{{ url_for('view_participants', trek_id=item.trek.id) }}" 
+                           class="btn btn-info">
+                            👥 View Participants
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="alert alert-info">
+        <strong>ℹ️ No Treks Assigned</strong>
+        <p class="mb-0">The admin has not assigned any treks to you yet. Please wait for assignment.</p>
+    </div>
+    {% endif %}
+
+    <!-- Staff Info -->
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Profile</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless mb-0">
+                        <tr>
+                            <th>Name:</th>
+                            <td>{{ current_user.full_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>{{ current_user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone:</th>
+                            <td>{{ current_user.phone or 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Experience:</th>
+                            <td>{{ current_user.experience_years or 'Not specified' }} years</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                {% if current_user.is_blacklisted %}
+                                    <span class="badge bg-danger">Blacklisted</span>
+                                {% else %}
+                                    <span class="badge bg-success">Active</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

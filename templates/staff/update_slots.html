@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Update Trek Details - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="page-title">✏️ Update Trek Details</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Trek Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Trek: {{ trek.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless mb-0">
+                        <tr>
+                            <th>Location:</th>
+                            <td>{{ trek.location }}</td>
+                        </tr>
+                        <tr>
+                            <th>Start Date:</th>
+                            <td>{{ trek.start_date.strftime('%d %b %Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>End Date:</th>
+                            <td>{{ trek.end_date.strftime('%d %b %Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Registered Users:</th>
+                            <td>{{ trek.total_slots - trek.get_available_slots() }} users</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Update Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Update Trek Details</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <!-- Total Slots -->
+                        <div class="mb-3">
+                            <label for="total_slots" class="form-label">Total Slots Available:</label>
+                            <input type="number" class="form-control" id="total_slots" name="total_slots" 
+                                   value="{{ trek.total_slots }}" min="1" required>
+                            <small class="text-muted">
+                                Current registrations: {{ trek.total_slots - trek.get_available_slots() }}
+                            </small>
+                        </div>
+
+                        <!-- Trek Status -->
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Trek Status:</label>
+                            <select class="form-select" id="status" name="status" required>
+                                <option value="Pending" {% if trek.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Approved" {% if trek.status == 'Approved' %}selected{% endif %}>Approved</option>
+                                <option value="Open" {% if trek.status == 'Open' %}selected{% endif %}>Open (Accepting Bookings)</option>
+                                <option value="Closed" {% if trek.status == 'Closed' %}selected{% endif %}>Closed (No New Bookings)</option>
+                                <option value="Completed" {% if trek.status == 'Completed' %}selected{% endif %}>Completed</option>
+                            </select>
+                            <small class="text-muted">
+                                Users can only book when status is "Open"
+                            </small>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('staff_dashboard') }}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                Update Trek
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Status Legend -->
+            <div class="alert alert-info mt-4">
+                <strong>Trek Status Information:</strong>
+                <ul class="mb-0 mt-2">
+                    <li><strong>Pending:</strong> Trek is being prepared</li>
+                    <li><strong>Approved:</strong> Admin has approved the trek</li>
+                    <li><strong>Open:</strong> Users can book slots</li>
+                    <li><strong>Closed:</strong> No new bookings allowed</li>
+                    <li><strong>Completed:</strong> Trek has finished</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

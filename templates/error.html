@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size: 5rem; margin-bottom: 20px;">
+                        ⚠️
+                    </div>
+                    <h2 class="card-title">Oops! Something Went Wrong</h2>
+                    <p class="card-text text-muted">{{ error }}</p>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-center mt-4">
+                        <a href="{{ url_for('home') }}" class="btn btn-primary">
+                            🏠 Back to Home
+                        </a>
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                            ← Go Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info -->
+            <div class="alert alert-info mt-4 text-center">
+                <p class="mb-0">
+                    If you continue to experience issues, please contact the administrator.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

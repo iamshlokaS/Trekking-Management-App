@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}My Bookings - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">📋 My Booking History</h1>
+
+    <!-- Booking Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6 class="text-muted">Total Bookings</h6>
+                <div class="stat-number">{{ bookings|length }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6 class="text-muted">Active Bookings</h6>
+                <div class="stat-number">
+                    {{ bookings|selectattr('status', 'equalto', 'Booked')|list|length }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6 class="text-muted">Completed</h6>
+                <div class="stat-number">
+                    {{ bookings|selectattr('status', 'equalto', 'Completed')|list|length }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6 class="text-muted">Cancelled</h6>
+                <div class="stat-number">
+                    {{ bookings|selectattr('status', 'equalto', 'Cancelled')|list|length }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="row">
+        <div class="col-md-12">
+            {% if bookings %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Trek Name</th>
+                            <th>Location</th>
+                            <th>Trek Date</th>
+                            <th>Booking Date</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Trek Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings|reverse %}
+                        <tr>
+                            <td><strong>{{ booking.trek.name }}</strong></td>
+                            <td>{{ booking.trek.location }}</td>
+                            <td>{{ booking.trek.start_date.strftime('%d %b %Y') }}</td>
+                            <td>{{ booking.booking_date.strftime('%d %b %Y') }}</td>
+                            <td>{{ booking.trek.duration_days }} days</td>
+                            <td>
+                                <span class="status-badge status-{{ booking.status.lower() }}">
+                                    {{ booking.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ booking.trek.status.lower() }}">
+                                    {{ booking.trek.status }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if booking.status == 'Booked' %}
+                                <form method="POST" action="{{ url_for('cancel_booking', booking_id=booking.id) }}" 
+                                      style="display: inline;" 
+                                      onsubmit="return confirm('Are you sure you want to cancel this booking?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        Cancel
+                                    </button>
+                                </form>
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Legend -->
+            <div class="alert alert-info mt-4">
+                <strong>Booking Status Explanation:</strong>
+                <ul class="mb-0 mt-2">
+                    <li><strong>Booked:</strong> Your booking is confirmed and active</li>
+                    <li><strong>Completed:</strong> You have completed this trek</li>
+                    <li><strong>Cancelled:</strong> Your booking has been cancelled</li>
+                </ul>
+            </div>
+
+            {% else %}
+            <div class="alert alert-info">
+                <strong>No bookings yet.</strong> 
+                <a href="{{ url_for('browse_treks') }}">Browse and book a trek now!</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-4">
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">
+            ← Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

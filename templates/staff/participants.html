@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Trek Participants - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="page-title">👥 Trek Participants: {{ trek.name }}</h1>
+
+    <!-- Trek Summary -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Trek Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table class="table table-borderless mb-0">
+                                <tr>
+                                    <th>Trek Name:</th>
+                                    <td><strong>{{ trek.name }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <th>Location:</th>
+                                    <td>{{ trek.location }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Difficulty:</th>
+                                    <td>
+                                        <span class="difficulty-badge difficulty-{{ trek.difficulty.lower() }}">
+                                            {{ trek.difficulty }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-borderless mb-0">
+                                <tr>
+                                    <th>Start Date:</th>
+                                    <td>{{ trek.start_date.strftime('%d %b %Y') }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Duration:</th>
+                                    <td>{{ trek.duration_days }} days</td>
+                                </tr>
+                                <tr>
+                                    <th>Total Participants:</th>
+                                    <td><span class="badge bg-success">{{ bookings|length }}</span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Participants Table -->
+    <div class="row">
+        <div class="col-md-12">
+            {% if bookings %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Booking Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td><strong>{{ booking.user.full_name }}</strong></td>
+                            <td>{{ booking.user.email }}</td>
+                            <td>{{ booking.user.phone or 'N/A' }}</td>
+                            <td>{{ booking.booking_date.strftime('%d %b %Y, %H:%M') }}</td>
+                            <td>
+                                <span class="status-badge status-{{ booking.status.lower() }}">
+                                    {{ booking.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Statistics -->
+            <div class="alert alert-info mt-4">
+                <strong>Participant Statistics:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>Total Registered: {{ bookings|length }}</li>
+                    <li>Trek Capacity: {{ trek.total_slots }}</li>
+                    <li>Available Slots: {{ trek.get_available_slots() }}</li>
+                    <li>Occupancy: {{ ((bookings|length) / trek.total_slots * 100)|round(1) }}%</li>
+                </ul>
+            </div>
+
+            <!-- Export/Print Option -->
+            <div class="mt-4">
+                <button class="btn btn-secondary" onclick="window.print()">
+                    🖨️ Print List
+                </button>
+            </div>
+
+            {% else %}
+            <div class="alert alert-info">
+                <strong>No participants yet.</strong> Users will appear here as they book your trek.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-4">
+        <a href="{{ url_for('staff_dashboard') }}" class="btn btn-secondary">
+            ← Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

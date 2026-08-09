@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Create Your Account</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <!-- User Type Selection -->
+                        <div class="mb-4">
+                            <label for="user_type" class="form-label">Register As:</label>
+                            <select class="form-select" id="user_type" name="user_type" required>
+                                <option value="">-- Select Account Type --</option>
+                                <option value="staff">Trek Staff</option>
+                                <option value="user">Trekker (User)</option>
+                            </select>
+                            <small class="text-muted">Admins cannot register; they are pre-existing.</small>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name:</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" required>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                            <small class="text-muted">Unique username for login</small>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number:</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            <small class="text-muted">Minimum 6 characters recommended</small>
+                        </div>
+
+                        <!-- Note for Staff -->
+                        <div class="alert alert-info" id="staff_note" style="display:none;">
+                            <strong>Note for Staff:</strong> After registration, your account will need 
+                            approval from the Admin before you can access the dashboard.
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Register
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Login Link -->
+            <div class="text-center mt-4">
+                <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Show/hide staff note based on user type selection
+    document.getElementById('user_type').addEventListener('change', function() {
+        const staffNote = document.getElementById('staff_note');
+        if (this.value === 'staff') {
+            staffNote.style.display = 'block';
+        } else {
+            staffNote.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

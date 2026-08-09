@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Login to Your Account</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <!-- User Type Selection -->
+                        <div class="mb-4">
+                            <label for="user_type" class="form-label">Login As:</label>
+                            <select class="form-select" id="user_type" name="user_type" required>
+                                <option value="">-- Select User Type --</option>
+                                <option value="admin">Admin</option>
+                                <option value="staff">Trek Staff</option>
+                                <option value="user">Trekker (User)</option>
+                            </select>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Login
+                            </button>
+                        </div>
+
+                        <!-- Information Box -->
+                        <div class="alert alert-info mt-4 mb-0">
+                            <strong>Demo Credentials:</strong>
+                            <br>Admin: username=<code>admin</code>, password=<code>admin123</code>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Register Link -->
+            <div class="text-center mt-4">
+                <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">👤 Admin</h6>
+                        </div>
+                        <div class="card-body small">
+                            Pre-existing superuser. Manages treks, staff, and users.
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">🎯 Trek Staff</h6>
+                        </div>
+                        <div class="card-body small">
+                            Guides and coordinators. Register and wait for admin approval.
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">🥾 Trekker (User)</h6>
+                        </div>
+                        <div class="card-body small">
+                            Participants who book and join treks.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

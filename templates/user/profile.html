@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="page-title">👤 My Profile</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Profile Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Edit Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name:</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" 
+                                   value="{{ user.full_name or '' }}" required>
+                        </div>
+
+                        <!-- Email (Read-only) -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address:</label>
+                            <input type="email" class="form-control" id="email" value="{{ user.email }}" disabled>
+                            <small class="text-muted">Email cannot be changed</small>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number:</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   value="{{ user.phone or '' }}">
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address:</label>
+                            <textarea class="form-control" id="address" name="address" rows="3">{{ user.address or '' }}</textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                💾 Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Account Info -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Account Information</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless mb-0">
+                        <tr>
+                            <th width="40%">Username:</th>
+                            <td><strong>{{ user.username }}</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Account Status:</th>
+                            <td>
+                                {% if user.is_blacklisted %}
+                                    <span class="badge bg-danger">Blacklisted</span>
+                                {% else %}
+                                    <span class="badge bg-success">Active</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Member Since:</th>
+                            <td>{{ user.created_at.strftime('%d %B %Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total Bookings:</th>
+                            <td>{{ user.bookings|length }}</td>
+                        </tr>
+                        <tr>
+                            <th>Active Bookings:</th>
+                            <td>{{ user.bookings|selectattr('status', 'equalto', 'Booked')|list|length }}</td>
+                        </tr>
+                        <tr>
+                            <th>Completed Treks:</th>
+                            <td>{{ user.bookings|selectattr('status', 'equalto', 'Completed')|list|length }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="alert alert-info mt-4">
+                <strong>ℹ️ Account Information:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>Your username and email are used for login and cannot be changed here</li>
+                    <li>Keep your contact information updated so trek staff can reach you</li>
+                    <li>Your profile is visible to trek staff managing your bookings</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

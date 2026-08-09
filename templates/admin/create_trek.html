@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Create Trek - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="page-title">➕ Create New Trek</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Trek Details</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <!-- Trek Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Trek Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location:</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+
+                        <!-- Difficulty -->
+                        <div class="mb-3">
+                            <label for="difficulty" class="form-label">Difficulty Level:</label>
+                            <select class="form-select" id="difficulty" name="difficulty" required>
+                                <option value="">-- Select Difficulty --</option>
+                                <option value="Easy">Easy</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+
+                        <!-- Duration -->
+                        <div class="mb-3">
+                            <label for="duration_days" class="form-label">Duration (Days):</label>
+                            <input type="number" class="form-control" id="duration_days" name="duration_days" min="1" required>
+                        </div>
+
+                        <!-- Start Date -->
+                        <div class="mb-3">
+                            <label for="start_date" class="form-label">Start Date:</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" required>
+                        </div>
+
+                        <!-- End Date -->
+                        <div class="mb-3">
+                            <label for="end_date" class="form-label">End Date:</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" required>
+                        </div>
+
+                        <!-- Total Slots -->
+                        <div class="mb-3">
+                            <label for="total_slots" class="form-label">Total Slots:</label>
+                            <input type="number" class="form-control" id="total_slots" name="total_slots" min="1" required>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description:</label>
+                            <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('admin_treks') }}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                Create Trek
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="alert alert-info mt-4">
+                <strong>ℹ️ Information:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>Trek status will be set to "Pending" initially</li>
+                    <li>Admin can approve or modify trek details after creation</li>
+                    <li>Staff assignment is done separately from trek creation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

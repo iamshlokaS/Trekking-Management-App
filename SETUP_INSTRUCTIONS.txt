@@ -1,0 +1,217 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                 TREKKING MANAGEMENT APPLICATION                           ║
+║                         SETUP INSTRUCTIONS                                ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+🎉 Welcome! Your complete Trekking Management Application is ready to run.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 CONTENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Complete Flask Application (app.py)
+✅ 20 HTML Templates
+✅ SQLite Database Support
+✅ Test Data Population Script
+✅ Quick Start Scripts (Windows & Mac/Linux)
+✅ Comprehensive Documentation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ QUICK START (5 MINUTES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OPTION 1: WINDOWS (Easiest!)
+─────────────────────────────
+1. Extract the ZIP file
+2. Double-click: run.bat
+3. Wait for Flask server to start
+4. Open browser: http://localhost:5000
+5. Login with: admin / admin123
+
+OPTION 2: MAC / LINUX
+──────────────────────
+1. Extract the ZIP file
+2. Open Terminal in this folder
+3. Run: chmod +x run.sh && ./run.sh
+4. Wait for Flask server to start
+5. Open browser: http://localhost:5000
+6. Login with: admin / admin123
+
+OPTION 3: MANUAL SETUP
+───────────────────────
+1. Extract the ZIP file
+2. Open Terminal/Command Prompt in this folder
+3. Create virtual environment:
+   - Windows: python -m venv venv && venv\Scripts\activate
+   - Mac/Linux: python3 -m venv venv && source venv/bin/activate
+4. Install dependencies: pip install -r requirements.txt
+5. Run app: python app.py
+6. Open browser: http://localhost:5000
+7. Login with: admin / admin123
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔐 DEFAULT LOGIN CREDENTIALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Admin:
+  Username: admin
+  Password: admin123
+  User Type: Admin
+
+📌 IMPORTANT: You can register new staff and users after login!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 FILE STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+trekking-management/
+├── app.py                      ← Main application (RUN THIS!)
+├── requirements.txt            ← Python dependencies
+├── run.bat                     ← Quick start (Windows)
+├── run.sh                      ← Quick start (Mac/Linux)
+├── populate_test_data.py       ← Add sample test data
+├── README.md                   ← Full documentation
+├── QUICKSTART.md              ← 5-minute setup guide
+├── PROJECT_SUMMARY.md         ← Project overview
+├── TEST_DATA_GUIDE.md         ← Test data information
+└── templates/                 ← HTML templates
+    ├── base.html
+    ├── home.html
+    ├── login.html
+    ├── register.html
+    ├── error.html
+    ├── admin/                 ← Admin pages (8 templates)
+    ├── staff/                 ← Staff pages (3 templates)
+    └── user/                  ← User pages (5 templates)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 NEXT STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. RUN THE APPLICATION
+   ✓ Use run.bat (Windows) or run.sh (Mac/Linux)
+   ✓ Or follow manual setup above
+
+2. LOGIN AS ADMIN
+   ✓ Username: admin
+   ✓ Password: admin123
+
+3. EXPLORE FEATURES
+   ✓ Create a trek
+   ✓ Browse admin dashboard
+   ✓ Manage staff members
+
+4. ADD TEST DATA (OPTIONAL)
+   ✓ Run: python populate_test_data.py
+   ✓ Creates sample users, staff, treks, and bookings
+   ✓ See TEST_DATA_GUIDE.md for more info
+
+5. REGISTER NEW USERS
+   ✓ Click "Register" on home page
+   ✓ Create staff or user accounts
+   ✓ Test different features
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+README.md
+  → Comprehensive guide with all features, setup, troubleshooting
+
+QUICKSTART.md
+  → Fast 5-minute setup guide (READ THIS FIRST!)
+
+PROJECT_SUMMARY.md
+  → Project overview, architecture, features
+
+TEST_DATA_GUIDE.md
+  → How to use test data, sample credentials
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚙️ REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Python 3.8 or higher
+✅ pip (Python package manager)
+✅ Modern web browser
+
+All other dependencies are automatically installed via requirements.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🆘 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: "Python not found"
+Solution: Install Python from https://www.python.org
+         Make sure to check "Add Python to PATH"
+
+Problem: "Port 5000 already in use"
+Solution: Edit app.py, find "port=5000" and change to "port=5001"
+
+Problem: "ModuleNotFoundError"
+Solution: Run: pip install -r requirements.txt
+
+Problem: "Database locked"
+Solution: Delete trekking_app.db file and restart
+
+Problem: Can't access http://localhost:5000
+Solution: Try http://127.0.0.1:5000 instead
+
+See README.md for more troubleshooting tips!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👨‍💼 ADMIN
+  ✓ Create, edit, delete treks
+  ✓ Approve staff registrations
+  ✓ Assign staff to treks
+  ✓ Manage users and staff
+  ✓ View all bookings
+  ✓ Search and filter
+  ✓ Blacklist users/staff
+
+👤 TREK STAFF
+  ✓ Self-register (needs approval)
+  ✓ View assigned treks
+  ✓ Update trek details
+  ✓ View participant list
+  ✓ Manage slots and status
+
+🥾 USERS (TREKKERS)
+  ✓ Register and login
+  ✓ Browse available treks
+  ✓ Filter by difficulty/location
+  ✓ Book treks
+  ✓ Cancel bookings
+  ✓ View booking history
+  ✓ Edit profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 YOU'RE ALL SET!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your Trekking Management Application is ready to run!
+
+Next: Start the application using run.bat or run.sh and begin exploring.
+
+Questions? Check the documentation files included (README.md, QUICKSTART.md).
+
+Happy Trekking! 🏔️
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Last Updated: July 2026
+Version: 1.0
+Status: Ready to Use ✅

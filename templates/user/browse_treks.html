@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Treks - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">🔍 Browse All Treks</h1>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">🔎 Filter Treks</h5>
+                </div>
+                <div class="card-body">
+                    <form method="GET" class="row g-3">
+                        <!-- Difficulty Filter -->
+                        <div class="col-md-4">
+                            <label for="difficulty" class="form-label">Difficulty Level:</label>
+                            <select class="form-select" name="difficulty" id="difficulty">
+                                <option value="all" {% if selected_difficulty == '' or selected_difficulty == 'all' %}selected{% endif %}>
+                                    All Levels
+                                </option>
+                                <option value="Easy" {% if selected_difficulty == 'Easy' %}selected{% endif %}>Easy</option>
+                                <option value="Moderate" {% if selected_difficulty == 'Moderate' %}selected{% endif %}>Moderate</option>
+                                <option value="Hard" {% if selected_difficulty == 'Hard' %}selected{% endif %}>Hard</option>
+                            </select>
+                        </div>
+
+                        <!-- Location Filter -->
+                        <div class="col-md-4">
+                            <label for="location" class="form-label">Location:</label>
+                            <input type="text" class="form-control" name="location" id="location" 
+                                   placeholder="Search location..." value="{{ selected_location or '' }}">
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-info w-100">
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Treks Grid -->
+    <div class="row">
+        {% if treks %}
+            {% for trek in treks %}
+            <div class="col-md-6 mb-4">
+                <div class="trek-card">
+                    <div class="trek-card-header">
+                        <h5 class="mb-0">{{ trek.name }}</h5>
+                    </div>
+                    <div class="trek-card-body">
+                        <table class="table table-borderless mb-3">
+                            <tr>
+                                <th>Location:</th>
+                                <td><strong>{{ trek.location }}</strong></td>
+                            </tr>
+                            <tr>
+                                <th>Difficulty:</th>
+                                <td>
+                                    <span class="difficulty-badge difficulty-{{ trek.difficulty.lower() }}">
+                                        {{ trek.difficulty }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Duration:</th>
+                                <td>{{ trek.duration_days }} days</td>
+                            </tr>
+                            <tr>
+                                <th>Start Date:</th>
+                                <td>{{ trek.start_date.strftime('%d %b %Y') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Available Slots:</th>
+                                <td>
+                                    {% set slots = trek.get_available_slots() %}
+                                    {% if slots > 0 %}
+                                        <span class="badge bg-success">{{ slots }}/{{ trek.total_slots }}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Full</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    <span class="status-badge status-{{ trek.status.lower() }}">
+                                        {{ trek.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Description (if available) -->
+                        {% if trek.description %}
+                        <p class="text-muted small">{{ trek.description[:100] }}...</p>
+                        {% endif %}
+
+                        <!-- Book Button -->
+                        {% if trek.status == 'Open' and trek.get_available_slots() > 0 %}
+                            <a href="{{ url_for('book_trek', trek_id=trek.id) }}" class="btn btn-primary w-100">
+                                📍 Book Now
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary w-100" disabled>
+                                ❌ Not Available
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="col-md-12">
+            <div class="alert alert-info text-center">
+                <h5>No treks found matching your filters.</h5>
+                <p>Try adjusting your search criteria or check back later.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

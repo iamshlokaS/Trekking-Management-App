@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Staff - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="page-title">👤 Assign Staff to Trek</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Trek Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Trek Information</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless mb-0">
+                        <tr>
+                            <th>Trek Name:</th>
+                            <td><strong>{{ trek.name }}</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Location:</th>
+                            <td>{{ trek.location }}</td>
+                        </tr>
+                        <tr>
+                            <th>Duration:</th>
+                            <td>{{ trek.duration_days }} days</td>
+                        </tr>
+                        <tr>
+                            <th>Start Date:</th>
+                            <td>{{ trek.start_date.strftime('%d %b %Y') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Currently Assigned:</th>
+                            <td>
+                                {% if trek.assigned_staff %}
+                                    <span class="badge bg-success">{{ trek.assigned_staff.full_name }}</span>
+                                {% else %}
+                                    <span class="text-muted">No staff assigned</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Staff Assignment Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Select Staff Member</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="staff_id" class="form-label">Available Staff:</label>
+                            {% if staff_list %}
+                            <select class="form-select" id="staff_id" name="staff_id" required>
+                                <option value="">-- Select a Staff Member --</option>
+                                {% for staff in staff_list %}
+                                <option value="{{ staff.id }}" {% if trek.assigned_staff and trek.assigned_staff.id == staff.id %}selected{% endif %}>
+                                    {{ staff.full_name }} ({{ staff.email }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <div class="alert alert-warning mb-0">
+                                No approved staff members available. Please approve staff members first.
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('admin_treks') }}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                            {% if staff_list %}
+                            <button type="submit" class="btn btn-primary">
+                                Assign Staff
+                            </button>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Staff List Info -->
+            {% if staff_list %}
+            <div class="alert alert-info mt-4">
+                <strong>ℹ️ Available Staff:</strong>
+                <ul class="mb-0 mt-2">
+                    {% for staff in staff_list %}
+                    <li>
+                        <strong>{{ staff.full_name }}</strong> - {{ staff.email }}
+                        {% if staff.experience_years %}
+                            ({{ staff.experience_years }} years experience)
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Staff - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">👥 Manage Trek Staff</h1>
+
+    <!-- Search -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="GET" class="d-flex gap-2">
+                <input type="text" class="form-control" name="search" placeholder="Search by name or username..." 
+                       value="{{ search_query or '' }}">
+                <button type="submit" class="btn btn-info">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Staff Table -->
+    <div class="row">
+        <div class="col-md-12">
+            {% if staff %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Experience</th>
+                            <th>Status</th>
+                            <th>Assigned Trek</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in staff %}
+                        <tr>
+                            <td><strong>{{ s.full_name }}</strong></td>
+                            <td>{{ s.email }}</td>
+                            <td>{{ s.phone or 'N/A' }}</td>
+                            <td>{{ s.experience_years or 0 }} years</td>
+                            <td>
+                                <div>
+                                    {% if s.is_blacklisted %}
+                                        <span class="badge bg-danger">Blacklisted</span>
+                                    {% elif s.is_approved %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                {% set trek_count = s.treks|length %}
+                                {% if trek_count > 0 %}
+                                    <span class="badge bg-info">{{ trek_count }} trek(s)</span>
+                                {% else %}
+                                    <span class="text-muted">None</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    {% if not s.is_approved and not s.is_blacklisted %}
+                                    <form method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-success btn-sm" 
+                                                formaction="{{ url_for('approve_staff', staff_id=s.id) }}">
+                                            ✅ Approve
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                    
+                                    <form method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-warning btn-sm" 
+                                                formaction="{{ url_for('blacklist_staff', staff_id=s.id) }}"
+                                                onclick="return confirm('Are you sure?')">
+                                            {% if s.is_blacklisted %}Remove Blacklist{% else %}⛔ Blacklist{% endif %}
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <strong>No staff found.</strong>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

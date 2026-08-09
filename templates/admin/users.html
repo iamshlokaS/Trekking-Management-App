@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">👥 Manage Users (Trekkers)</h1>
+
+    <!-- Search -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="GET" class="d-flex gap-2">
+                <input type="text" class="form-control" name="search" placeholder="Search by name or username..." 
+                       value="{{ search_query or '' }}">
+                <button type="submit" class="btn btn-info">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="row">
+        <div class="col-md-12">
+            {% if users %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Joined</th>
+                            <th>Bookings</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td><strong>{{ user.full_name }}</strong></td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone or 'N/A' }}</td>
+                            <td>{{ user.created_at.strftime('%d %b %Y') }}</td>
+                            <td>
+                                {% set booking_count = user.bookings|length %}
+                                <span class="badge bg-info">{{ booking_count }}</span>
+                            </td>
+                            <td>
+                                {% if user.is_blacklisted %}
+                                    <span class="badge bg-danger">Blacklisted</span>
+                                {% else %}
+                                    <span class="badge bg-success">Active</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form method="POST" style="display: inline;">
+                                    <button type="submit" class="btn btn-warning btn-sm" 
+                                            formaction="{{ url_for('blacklist_user', user_id=user.id) }}"
+                                            onclick="return confirm('Are you sure?')">
+                                        {% if user.is_blacklisted %}Remove Blacklist{% else %}⛔ Blacklist{% endif %}
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <strong>No users found.</strong>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

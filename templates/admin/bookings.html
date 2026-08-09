@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}View Bookings - Trekking Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="page-title">📋 All Trek Bookings</h1>
+
+    <!-- Bookings Table -->
+    <div class="row">
+        <div class="col-md-12">
+            {% if bookings %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>User</th>
+                            <th>Trek</th>
+                            <th>Location</th>
+                            <th>Booking Date</th>
+                            <th>Status</th>
+                            <th>Trek Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td><strong>#{{ booking.id }}</strong></td>
+                            <td>{{ booking.user.full_name }}</td>
+                            <td>{{ booking.trek.name }}</td>
+                            <td>{{ booking.trek.location }}</td>
+                            <td>{{ booking.booking_date.strftime('%d %b %Y') }}</td>
+                            <td>
+                                <span class="status-badge status-{{ booking.status.lower() }}">
+                                    {{ booking.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ booking.trek.status.lower() }}">
+                                    {{ booking.trek.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Statistics -->
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <h6 class="text-muted">Total Bookings</h6>
+                        <div class="stat-number">{{ bookings|length }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <h6 class="text-muted">Active Bookings</h6>
+                        <div class="stat-number">
+                            {{ bookings|selectattr('status', 'equalto', 'Booked')|list|length }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <h6 class="text-muted">Completed</h6>
+                        <div class="stat-number">
+                            {{ bookings|selectattr('status', 'equalto', 'Completed')|list|length }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <h6 class="text-muted">Cancelled</h6>
+                        <div class="stat-number">
+                            {{ bookings|selectattr('status', 'equalto', 'Cancelled')|list|length }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <strong>No bookings found.</strong>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
