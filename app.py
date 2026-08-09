@@ -845,6 +845,7 @@ if __name__ == '__main__':
     # Initialize database on first run
     init_db()
     
-    # Run Flask development server
-    # Note: In production, use a proper WSGI server like Gunicorn
-    app.run(debug=True, host='localhost', port=5000)
+    # Run Flask server for Railway
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
