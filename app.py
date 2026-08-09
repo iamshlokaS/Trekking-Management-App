@@ -4,7 +4,7 @@
 # SQLite-Only Version (Compliant with Requirements)
 
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from functools import wraps
@@ -17,7 +17,6 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-i
 # ============================================
 # DATABASE CONFIGURATION - SQLITE ONLY
 # ============================================
-# Using SQLite as per mandatory requirements
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trekking_app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -31,7 +30,7 @@ login_manager.login_view = 'login'
 # DATABASE MODELS
 # ============================================
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     """User model for trekkers (participants)"""
     __tablename__ = 'users'
     
@@ -48,16 +47,12 @@ class User(db.Model):
     # Relationships
     bookings = db.relationship('Booking', backref='user', lazy=True, cascade='all, delete-orphan')
     
-    # For Flask-Login
-    @property
     def is_active(self):
         return not self.is_blacklisted
     
-    @property
     def is_authenticated(self):
         return True
     
-    @property
     def is_anonymous(self):
         return False
     
@@ -65,7 +60,7 @@ class User(db.Model):
         return str(self.id)
 
 
-class Staff(db.Model):
+class Staff(db.Model, UserMixin):
     """Staff model for trek coordinators/guides"""
     __tablename__ = 'staff'
     
@@ -83,16 +78,12 @@ class Staff(db.Model):
     # Relationships
     treks = db.relationship('Trek', backref='assigned_staff', lazy=True)
     
-    # For Flask-Login
-    @property
     def is_active(self):
         return self.is_approved and not self.is_blacklisted
     
-    @property
     def is_authenticated(self):
         return True
     
-    @property
     def is_anonymous(self):
         return False
     
@@ -100,7 +91,7 @@ class Staff(db.Model):
         return f"staff_{self.id}"
 
 
-class Admin(db.Model):
+class Admin(db.Model, UserMixin):
     """Admin model - superuser"""
     __tablename__ = 'admin'
     
@@ -111,16 +102,12 @@ class Admin(db.Model):
     full_name = db.Column(db.String(120))
     created_at = db.Column(db.DateTime, default=datetime.now)
     
-    # For Flask-Login
-    @property
     def is_active(self):
         return True
     
-    @property
     def is_authenticated(self):
         return True
     
-    @property
     def is_anonymous(self):
         return False
     
@@ -135,14 +122,14 @@ class Trek(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     location = db.Column(db.String(120), nullable=False)
-    difficulty = db.Column(db.String(20), nullable=False)  # Easy, Moderate, Hard
+    difficulty = db.Column(db.String(20), nullable=False)
     duration_days = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text)
     total_slots = db.Column(db.Integer, nullable=False)
     available_slots = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime, nullable=False)
     end_date = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.String(20), default='Pending')  # Pending, Approved, Open, Closed, Completed
+    status = db.Column(db.String(20), default='Pending')
     assigned_staff_id = db.Column(db.Integer, db.ForeignKey('staff.id'))
     created_by = db.Column(db.Integer, db.ForeignKey('admin.id'))
     created_at = db.Column(db.DateTime, default=datetime.now)
@@ -164,7 +151,7 @@ class Booking(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     trek_id = db.Column(db.Integer, db.ForeignKey('treks.id'), nullable=False)
     booking_date = db.Column(db.DateTime, default=datetime.now)
-    status = db.Column(db.String(20), default='Booked')  # Booked, Cancelled, Completed
+    status = db.Column(db.String(20), default='Booked')
     notes = db.Column(db.Text)
 
 
@@ -184,7 +171,7 @@ def load_user(user_id):
             return Staff.query.get(staff_id)
         else:
             return User.query.get(int(user_id))
-    except (ValueError, IndexError):
+    except (ValueError, IndexError, TypeError):
         return None
 
 
@@ -195,11 +182,9 @@ def load_user(user_id):
 def init_db():
     """Initialize database with tables and default admin user"""
     with app.app_context():
-        # Create all tables
         db.create_all()
         print("✅ Database tables created successfully")
         
-        # Check if admin exists
         admin = Admin.query.first()
         if not admin:
             admin = Admin(
@@ -215,11 +200,9 @@ def init_db():
             print("✅ Admin user already exists")
 
 
-# Ensure database is initialized when app starts
+# Initialize database on app startup
 with app.app_context():
     db.create_all()
-    
-    # Ensure admin exists
     if Admin.query.first() is None:
         admin = Admin(
             username='admin',
@@ -229,7 +212,6 @@ with app.app_context():
         )
         db.session.add(admin)
         db.session.commit()
-        print("✅ Database initialized with default admin")
 
 
 # ============================================
@@ -246,7 +228,6 @@ def role_required(role):
             
             try:
                 user_type = type(current_user).__name__
-                
                 if user_type == role:
                     return f(*args, **kwargs)
                 else:
@@ -456,8 +437,11 @@ def user_dashboard():
 @app.route('/')
 def home():
     """Home page"""
-    if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+    try:
+        if current_user and current_user.is_authenticated:
+            return redirect(url_for('dashboard'))
+    except:
+        pass
     return render_template('home.html')
 
 
@@ -470,7 +454,15 @@ def not_found(error):
 @app.errorhandler(500)
 def server_error(error):
     """Handle 500 errors"""
+    print(f"Server error: {error}")
     return render_template('error.html', error='Server error'), 500
+
+
+@app.errorhandler(403)
+def forbidden(error):
+    """Handle 403 errors"""
+    print(f"403 Forbidden error: {error}")
+    return render_template('error.html', error='Access forbidden'), 403
 
 
 # ============================================
@@ -480,8 +472,6 @@ def server_error(error):
 if __name__ == '__main__':
     init_db()
     
-    # Run Flask development server
-    # SQLite will automatically create database file
     print("\n" + "="*60)
     print("🏔️  TREKKING MANAGEMENT APPLICATION")
     print("="*60)
