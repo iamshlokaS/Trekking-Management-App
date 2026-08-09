@@ -215,22 +215,26 @@ def role_required(role):
             if not current_user.is_authenticated:
                 flash('Please log in first', 'danger')
                 return redirect(url_for('login'))
-            
-            # Check user type
+
             try:
-                user_type = type(current_user).__name__
+                # Get the actual user object behind Flask-Login's LocalProxy
+                user = current_user._get_current_object()
+                user_type = type(user).__name__
+
                 print(f"Access check - Expected: {role}, Got: {user_type}")
-                
+
                 if user_type == role:
                     return f(*args, **kwargs)
                 else:
                     print(f"Access denied: {user_type} trying to access {role} area")
                     flash('Unauthorized access', 'danger')
                     return redirect(url_for('home'))
+
             except Exception as e:
                 print(f"Role check error: {e}")
                 flash('An error occurred', 'danger')
                 return redirect(url_for('home'))
+
         return decorated_function
     return decorator
 
